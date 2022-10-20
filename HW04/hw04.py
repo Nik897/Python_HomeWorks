@@ -53,18 +53,10 @@ def no_double_numbers(my_str):
             result.append(my_str[i])
     return result
 
-
-# def empty_list(num):
-#     result = []
-#     for i in range(num + 1):
-#         result.append(0)
-#     return result
-
-
 def generate_coefficients(num):
     res = []
     for i in range(num + 1):
-        res.append(randint(-100, 101))
+        res.append(randint(-100, 100))
     return res
 
 
@@ -92,13 +84,39 @@ def polynomial(coeff_lst, num):
     else:
         return res_str
 
+def parse_coeff(my_str):
+    temp_str = my_str.replace(" ", "")[:-2]
+    temp_lst = temp_str.replace("-", "+-").split("+")
+
+    x = temp_lst[0].find("x^")
+    rang = int(temp_lst[0][x + 2:])
+    null_lst = ["0"] * (rang + 1)
+
+    for i in range(rang):
+        x = temp_lst[i].find("x^")
+        if x != -1:
+            degree = int(temp_lst[i][x + 2:])
+            null_lst[degree] = temp_lst[i][:x]
+        else:
+            x_1 = temp_lst[i].find("x")
+            if x_1 != -1:
+                null_lst[1] = temp_lst[i][:x_1]
+            else:
+                null_lst[0] = temp_lst[i]
+                break
+
+    print(temp_lst)
+
+    return null_lst
+
+
 
 while True:
     print("1. Вычислить число Пи c заданной точностью d (d от 0.1 до 0.0000000001)")
     print("2. Задайте натуральное число N. Напишите программу, которая составит список простых множителей числа N.")
     print("3. Задайте последовательность цифр. Напишите программу, которая выведет список неповторяющихся элементов исходной последовательности.")
     print("4. Задана натуральная степень k. Сформировать случайным образом список коэффициентов (значения от -100 до 100) многочлена и записать в файл многочлен степени k")
-    print("5. ")
+    print("5. Даны два файла, в каждом из которых находится запись многочлена. Задача - сформировать файл, содержащий сумму многочленов.")
 
     menu_item = input("Выберите номер задачи: ")
 
@@ -149,8 +167,15 @@ while True:
 
     elif menu_item == "5":
 
-        print(1)
+        data_file = open("test.txt")
 
+        first_data = data_file.readline()
+
+        data_file.close()
+
+        a = parse_coeff(first_data) 
+
+        print(a)
     elif menu_item == "0":
         break
     else:
