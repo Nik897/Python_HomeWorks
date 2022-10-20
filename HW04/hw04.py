@@ -1,9 +1,24 @@
-from random import randint, random
+from decimal import Decimal
+from random import randint
+import decimal
+
+def accuracy(num):
+    res = 0
+    while num < 1:
+        res += 1
+        num *= 10
+    return res
 
 def my_pi(num):
-    res = 0
-    for i in range(1, 1000000):
-        res = res+4*((-1)**(i+1))/(2*i-1)
+    res = Decimal(0)
+
+    decimal.getcontext().prec = num + 1
+
+    i = 0
+    while i < num:
+        res += (Decimal(1) / (16**i))*((Decimal(4) / (8*i + 1)) -
+                                     (Decimal(2) / (8*i + 4))-(Decimal(1) / (8*i + 5))-(Decimal(1) / (8*i + 6)))
+        i += 1
     return res
 
 
@@ -50,22 +65,32 @@ def generate_coefficients(num):
     res = []
     for i in range(num + 1):
         res.append(randint(-100, 101))
-    return res    
+    return res
+
 
 def polynomial(coeff_lst, num):
-    res_str = " = 0"
+    res_str = "=0"
     for i in range(num+1):
         if coeff_lst[i]:
-            if i == 0:
-                res_str = " +" + str(coeff_lst[i]) + res_str
-            elif i == 1:
-                res_str = " +" + str(coeff_lst[i]) + "x" + res_str
+            if coeff_lst[i] > 0:
+                if i == 0:
+                    res_str = "+" + str(coeff_lst[i]) + res_str
+                elif i == 1:
+                    res_str = "+" + str(coeff_lst[i]) + "x" + res_str
+                else:
+                    res_str = "+" + str(coeff_lst[i]) + "x^" + str(i) + res_str
             else:
-                res_str = " +" + str(coeff_lst[i]) + "x^" + str(i) + res_str    
+                if i == 0:
+                    res_str = str(coeff_lst[i]) + res_str
+                elif i == 1:
+                    res_str = str(coeff_lst[i]) + "x" + res_str
+                else:
+                    res_str = str(coeff_lst[i]) + "x^" + str(i) + res_str
 
-          
-    return res_str
-
+    if res_str[0] == "+":
+        return res_str[1:]
+    else:
+        return res_str
 
 
 while True:
@@ -78,7 +103,12 @@ while True:
     menu_item = input("Выберите номер задачи: ")
 
     if menu_item == "1":
-        print(my_pi(1000))
+
+        number_1 = float(input("Введите точность числа (от 0.1 до 0.0000000001): "))
+
+        acc = accuracy(number_1)
+
+        print(my_pi(acc))
 
     elif menu_item == "2":
 
@@ -105,19 +135,17 @@ while True:
 
         k = int(input("Задайте натуральную степень: "))
 
-        # matrix = empty_list(k)
-
-        # print(matrix)
-
         coefficients = generate_coefficients(k)
-
-        print(coefficients)
 
         s = polynomial(coefficients, k)
 
-        print(s)
+        print(f"Данный результат записан в файл 'polynominal_4.txt' {s}")
 
-        
+        my_file = open("polynominal_4.txt", "a")
+
+        my_file.write(s + "\n")
+
+        my_file.close()
 
     elif menu_item == "5":
 
