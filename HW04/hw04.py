@@ -91,7 +91,6 @@ def parse_coeff(my_str):
     if temp_lst[0] == "":
         q = temp_lst.pop(0)
 
-
     x = temp_lst[0].find("x^")
     rang = int(temp_lst[0][x + 2:])
     null_lst = ["0"] * (rang + 1)
@@ -115,14 +114,17 @@ def parse_coeff(my_str):
         elif null_lst[i] == "-":
             null_lst[i] = "-1"
 
-
-
-
-    print(temp_lst)
-
     return null_lst
 
+def summ_coeffs(lst_1, lst_2):
+    cff_1_int = list(map(int, lst_1))
+    cff_2_int = list(map(int, lst_2))
 
+    res = list(map(lambda x, y: x + y, cff_1_int, cff_2_int))
+
+   
+
+    return res
 
 while True:
     print("1. Вычислить число Пи c заданной точностью d (d от 0.1 до 0.0000000001)")
@@ -180,15 +182,29 @@ while True:
 
     elif menu_item == "5":
 
-        data_file = open("test.txt")
-
+        data_file = open("polynominal_5_1.txt")
         first_data = data_file.readline()
-
         data_file.close()
+        coeff_1 = parse_coeff(first_data) 
 
-        a = parse_coeff(first_data) 
+        data_file = open("polynominal_5_2.txt")
+        second_data = data_file.readline()
+        data_file.close()
+        coeff_2 = parse_coeff(second_data) 
 
-        print(a)
+        # print(coeff_1)
+        # print(coeff_2)
+
+        mult_poly = summ_coeffs(coeff_1, coeff_2)
+
+        d = len(mult_poly) - 1
+
+        final_result = polynomial(mult_poly, d)
+
+        print(final_result)
+
+        # print(mult_poly)
+
     elif menu_item == "0":
         break
     else:
