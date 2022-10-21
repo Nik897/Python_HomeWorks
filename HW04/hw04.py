@@ -88,6 +88,10 @@ def parse_coeff(my_str):
     temp_str = my_str.replace(" ", "")[:-2]
     temp_lst = temp_str.replace("-", "+-").split("+")
 
+    if temp_lst[0] == "":
+        q = temp_lst.pop(0)
+
+
     x = temp_lst[0].find("x^")
     rang = int(temp_lst[0][x + 2:])
     null_lst = ["0"] * (rang + 1)
@@ -104,6 +108,15 @@ def parse_coeff(my_str):
             else:
                 null_lst[0] = temp_lst[i]
                 break
+
+    for i in range(len(null_lst)):
+        if null_lst[i] == "":
+            null_lst[i] = "1"
+        elif null_lst[i] == "-":
+            null_lst[i] = "-1"
+
+
+
 
     print(temp_lst)
 
