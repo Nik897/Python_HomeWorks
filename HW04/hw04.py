@@ -122,7 +122,13 @@ def summ_coeffs(lst_1, lst_2):
 
     res = list(map(lambda x, y: x + y, cff_1_int, cff_2_int))
 
+    return res
+
+def del_one(my_str):
    
+    x = my_str.find("1x")
+    if my_str[x-1] == "+" or my_str[x-1] == "-":
+        res = my_str.replace("1x", "x") 
 
     return res
 
@@ -192,18 +198,16 @@ while True:
         data_file.close()
         coeff_2 = parse_coeff(second_data) 
 
-        # print(coeff_1)
-        # print(coeff_2)
-
         mult_poly = summ_coeffs(coeff_1, coeff_2)
 
-        d = len(mult_poly) - 1
+        final_result = polynomial(mult_poly, len(mult_poly) - 1)
 
-        final_result = polynomial(mult_poly, d)
+        fin_res = del_one(final_result)
+        print(f"Результат умножения записан в файл 'result.txt' {fin_res}")
 
-        print(final_result)
-
-        # print(mult_poly)
+        data_file = open("result.txt", "w")
+        data_file.write(fin_res)
+        data_file.close()
 
     elif menu_item == "0":
         break
